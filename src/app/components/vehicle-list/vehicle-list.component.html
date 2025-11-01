@@ -7,9 +7,11 @@
       <mat-label>Search Vehicle Model</mat-label>
       <input matInput [(ngModel)]="searchText" placeholder="e.g. Toyota" />
     </mat-form-field>
-
-    <button mat-raised-button color="primary" (click)="search()">Search</button>
+<div class="toolbar">
+  <button mat-raised-button color="primary" (click)="search()">Search</button>
     <button mat-stroked-button color="accent" (click)="loadVehicles()">Reset</button>
+</div>
+    
   </div>
   <div class="toolbar">
   <button mat-raised-button color="primary" (click)="openImportDialog()">
