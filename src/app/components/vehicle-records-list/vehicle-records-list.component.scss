@@ -1,0 +1,84 @@
+
+.records-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.filter-card,
+.column-card {
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.vin-select {
+  flex: 1;
+  min-width: 300px;
+}
+
+.vehicle-details {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.detail-item {
+  strong {
+    margin-right: 5px;
+  }
+}
+
+.column-checkboxes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  mat-checkbox {
+    min-width: 150px;
+  }
+}
+
+.records-summary {
+  margin-bottom: 15px;
+  
+  p {
+    font-size: 14px;
+    color: #666;
+  }
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}

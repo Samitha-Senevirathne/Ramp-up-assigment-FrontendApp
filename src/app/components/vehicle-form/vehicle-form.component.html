@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Edit Vehicle</h2>
+
+<div mat-dialog-content class="form-body">
+  <mat-form-field appearance="outline">
+    <mat-label>First Name</mat-label>
+    <input matInput [(ngModel)]="vehicle.first_name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Last Name</mat-label>
+    <input matInput [(ngModel)]="vehicle.last_name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Car Model</mat-label>
+    <input matInput [(ngModel)]="vehicle.car_model" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Manufactured Date</mat-label>
+    <input matInput type="date" [(ngModel)]="vehicle.manufactured_date" />
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="saveChanges()">Save</button>
+</div>

@@ -1,0 +1,22 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+button {
+  margin-left: 10px;
+  
+  mat-icon {
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+}
+
+.active-link {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}

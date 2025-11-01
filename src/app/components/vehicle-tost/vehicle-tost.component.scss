@@ -1,0 +1,55 @@
+@use '@angular/material' as mat;
+$my-primary: mat.define-palette(mat.$green-palette, 600);
+$my-accent: mat.define-palette(mat.$teal-palette, 400);
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+}
+
+.toast {
+  background: mat.get-color-from-palette($my-primary, 600);
+  color: #ffffff;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  max-width: 320px;
+  letter-spacing: 0.2px;
+  font-family: 'Roboto', sans-serif;
+  border-left: 4px solid mat.get-color-from-palette($my-accent, 300);
+  animation: fadeIn 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: mat.get-color-from-palette($my-primary, 700);
+    transform: scale(1.02);
+  }
+
+  a {
+    color: mat.get-color-from-palette($my-accent, 100);
+    text-decoration: underline;
+    font-weight: 500;
+
+    &:hover {
+      color: mat.get-color-from-palette($my-accent, 50);
+    }
+  }
+}
+
+//Entry animation for smoother appearance
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

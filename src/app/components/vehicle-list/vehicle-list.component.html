@@ -1,0 +1,90 @@
+
+
+
+<div class="vehicle-list-container">
+  <div class="search-bar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Vehicle Model</mat-label>
+      <input matInput [(ngModel)]="searchText" placeholder="e.g. Toyota" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="search()">Search</button>
+    <button mat-stroked-button color="accent" (click)="loadVehicles()">Reset</button>
+  </div>
+  <div class="toolbar">
+  <button mat-raised-button color="primary" (click)="openImportDialog()">
+    +Import file 
+  </button>
+    <button mat-raised-button color="primary" (click)="openExportDialog()">
+    Export file 
+  </button>
+</div>
+
+  <table mat-table [dataSource]="vehicles" class="mat-elevation-z8 full-width-table">
+    <!-- Vehicle ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>VIN</th>
+      <td mat-cell *matCellDef="let v">{{ v.vin }}</td>
+    </ng-container>
+
+    <!-- First Name -->
+    <ng-container matColumnDef="first_name">
+      <th mat-header-cell *matHeaderCellDef>First Name</th>
+      <td mat-cell *matCellDef="let v">{{ v.first_name }}</td>
+    </ng-container>
+
+    <!-- Last Name -->
+    <ng-container matColumnDef="last_name">
+      <th mat-header-cell *matHeaderCellDef>Last Name</th>
+      <td mat-cell *matCellDef="let v">{{ v.last_name }}</td>
+    </ng-container>
+
+    <!-- Car Model -->
+    <ng-container matColumnDef="car_model">
+      <th mat-header-cell *matHeaderCellDef>Model</th>
+      <td mat-cell *matCellDef="let v">{{ v.car_model }}</td>
+    </ng-container>
+
+    <!-- Manufactured Date -->
+    <ng-container matColumnDef="manufactured_date">
+      <th mat-header-cell *matHeaderCellDef>Manufactured</th>
+      <td mat-cell *matCellDef="let v">{{ v.manufactured_date | date: 'yyyy-MM-dd' }}</td>
+    </ng-container>
+
+    <!-- Age -->
+    <ng-container matColumnDef="age_of_vehicle">
+      <th mat-header-cell *matHeaderCellDef>Age (Years)</th>
+      <td mat-cell *matCellDef="let v">{{ v.age_of_vehicle }}</td>
+    </ng-container>
+
+ <!-- Actions -->
+<ng-container matColumnDef="actions">
+  <th mat-header-cell *matHeaderCellDef> Actions </th>
+  <td mat-cell *matCellDef="let v">
+    <button mat-button color="accent" (click)="updateVehicle(v)">Edit</button>
+    <button mat-button color="warn" (click)="deleteVehicle(v.id)">Delete</button>
+  </td>
+</ng-container>
+
+
+    <!-- Header + Row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button mat-raised-button color="primary" (click)="prevPage()" [disabled]="page <= 1">
+      Prev
+    </button>
+    <span>Page {{ page }}</span>
+    <button mat-raised-button color="primary" (click)="nextPage()">
+      Next
+    </button>
+  </div>
+
+  <!-- If No Data -->
+  <div *ngIf="vehicles.length === 0" class="no-data">
+    <p>No vehicles found.</p>
+  </div>
+</div>

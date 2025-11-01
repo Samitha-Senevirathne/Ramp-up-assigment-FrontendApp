@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <span class="logo">Vehicle Management System</span>
+
+  <span class="spacer"></span>
+
+  <button mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+    <mat-icon>directions_car</mat-icon> Vehicles
+  </button>
+  
+  <button mat-button routerLink="/service-records" routerLinkActive="active-link">
+    <mat-icon>build</mat-icon> Service Records
+  </button>
+  
+  <button mat-button routerLink="/vehicle-search" routerLinkActive="active-link">
+    <mat-icon>search</mat-icon> Search by VIN
+  </button>
+
+  <button mat-button (click)="resetUser()">
+<mat-icon>remove user</mat-icon>Remove User
+</button>
+</mat-toolbar>

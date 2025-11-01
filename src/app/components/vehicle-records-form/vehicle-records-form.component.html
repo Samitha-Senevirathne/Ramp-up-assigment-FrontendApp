@@ -1,0 +1,31 @@
+
+<h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Create' }} Service Record</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>VIN</mat-label>
+    <input matInput [(ngModel)]="record.vin" [disabled]="isEdit" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="record.description" rows="3" required></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Service Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="record.service_date" required />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Cost</mat-label>
+    <input matInput type="number" [(ngModel)]="record.cost" />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>
