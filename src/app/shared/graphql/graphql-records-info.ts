@@ -90,4 +90,20 @@ export const GET_ALL_VEHICLES_DROPDOWN = gql`
       car_model
     }
   }
+
+`;
+
+
+//FinallwithoutPaginatiion
+export const FIND_ALL_VEHICLES_NO_PAGINATION = gql`
+  query FindAllVehiclesNoPagination {
+    findAllVehiclesNoPagination {
+      id
+      vin
+      first_name
+      last_name
+      car_make
+      car_model
+    }
+  }
 `;

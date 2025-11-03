@@ -11,7 +11,7 @@ export class NotificationService {
     if (!this.connected) {
       this.socket = io('http://localhost:3000', { query: { userId } });
       this.connected = true;
-      console.log(`🔌 Connected as ${userId}`);
+      console.log(`Connected as ${userId}`);
     }
   }
 

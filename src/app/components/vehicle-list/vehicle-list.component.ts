@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { VehicleService } from '../../services/vehicle.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -11,7 +11,8 @@ import { VehicleFormComponent } from '../vehicle-form/vehicle-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VehicleImportComponent } from '../vehicle-import/vehicle-import.component';
 import { VehicleExportComponent } from '../vehicle-export/vehicle-export.component';
-
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -28,12 +29,14 @@ import { VehicleExportComponent } from '../vehicle-export/vehicle-export.compone
   templateUrl: './vehicle-list.component.html',
   styleUrls: ['./vehicle-list.component.scss'],
 })
-export class VehicleListComponent implements OnInit {
+export class VehicleListComponent implements OnInit, OnDestroy {
   vehicles: any[] = [];
   displayedColumns = [
     'id',
     'first_name',
     'last_name',
+    'email',
+    'car_make',
     'car_model',
     'manufactured_date',
     'age_of_vehicle',
@@ -41,14 +44,27 @@ export class VehicleListComponent implements OnInit {
   ];
   searchText = '';
   page = 1;
+  private searchSubject = new Subject<string>();
 
-  constructor(private vehicleService: VehicleService,
-      private dialog: MatDialog
-
+  constructor(
+    private vehicleService: VehicleService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.loadVehicles();
+    
+    // Setup debounced search
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(searchTerm => {
+      this.performSearch(searchTerm);
+    });
+  }
+
+  ngOnDestroy() {
+    this.searchSubject.complete();
   }
 
   loadVehicles() {
@@ -61,18 +77,26 @@ export class VehicleListComponent implements OnInit {
       .catch((err) => console.error('Error fetching vehicles', err));
   }
 
-  search() {
-    if (this.searchText.trim() === '') {
+  onSearchChange() {
+    this.searchSubject.next(this.searchText);
+  }
+
+  performSearch(searchTerm: string) {
+    if (searchTerm.trim() === '') {
       this.loadVehicles();
       return;
     }
 
     this.vehicleService
-      .searchByModel(this.searchText)
+      .searchByModel(searchTerm)
       .then((res) => {
         this.vehicles = res.data?.searchByModel || [];
       })
       .catch((err) => console.error('Error searching vehicles', err));
+  }
+
+  search() {
+    this.performSearch(this.searchText);
   }
 
   deleteVehicle(id: string) {
@@ -97,36 +121,32 @@ export class VehicleListComponent implements OnInit {
     this.loadVehicles();
   }
 
-
-
   updateVehicle(vehicle: any) {
-  const dialogRef = this.dialog.open(VehicleFormComponent, {
-    width: '400px',
-    data: { vehicle },
-  });
+    const dialogRef = this.dialog.open(VehicleFormComponent, {
+      width: '400px',
+      data: { vehicle },
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.loadVehicles(); //refresh list if saved
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadVehicles();
+      }
+    });
+  }
 
+  openImportDialog() {
+    const dialogRef = this.dialog.open(VehicleImportComponent, {
+      width: '400px',
+    });
 
-openImportDialog() {
-  const dialogRef = this.dialog.open(VehicleImportComponent, {
-    width: '400px',
-  });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadVehicles();
+      }
+    });
+  }
 
-  dialogRef.afterClosed().subscribe((result) => {
-    if (result) {
-      // Optionally refresh vehicle list after upload
-      this.loadVehicles();
-    }
-  });
-}
-
-openExportDialog() {
-  this.dialog.open(VehicleExportComponent, { width: '400px' });
-}
+  openExportDialog() {
+    this.dialog.open(VehicleExportComponent, { width: '400px' });
+  }
 }

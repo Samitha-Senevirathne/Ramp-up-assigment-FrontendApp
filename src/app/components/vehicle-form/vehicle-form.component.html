@@ -12,14 +12,24 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" [(ngModel)]="vehicle.email" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Car Make</mat-label>
+    <input matInput [(ngModel)]="vehicle.car_make" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
     <mat-label>Car Model</mat-label>
     <input matInput [(ngModel)]="vehicle.car_model" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Manufactured Date</mat-label>
-    <input matInput type="date" [(ngModel)]="vehicle.manufactured_date" />
-  </mat-form-field>
+  <div class="date-field">
+  <label>Manufactured Date</label>
+  <input type="date" [(ngModel)]="vehicle.manufactured_date" />
+</div>
 </div>
 
 <div mat-dialog-actions align="end">

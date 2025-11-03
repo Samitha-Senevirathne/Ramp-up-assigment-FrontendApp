@@ -18,6 +18,26 @@ h2 {
   margin-bottom: 20px;
 }
 
+.column-card {
+  .column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+
+    mat-card-title {
+      margin-bottom: 0;
+    }
+
+    .toggle-button {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+    }
+  }
+}
+
 .filter-row {
   display: flex;
   gap: 15px;

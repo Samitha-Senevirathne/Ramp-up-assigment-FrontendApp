@@ -9,7 +9,9 @@ import {
   DELETE_SERVICE_RECORD,
   VEHICLE_WITH_RECORDS,
   GET_ALL_VEHICLES_DROPDOWN,
+  FIND_ALL_VEHICLES_NO_PAGINATION,
 } from '../shared/graphql/graphql-records-info';
+import { FIND_ALL_VEHICLES } from '../shared/graphql/graphql-vehicle-info';
 
 @Injectable({
   providedIn: 'root',
@@ -147,7 +149,7 @@ export class RecordsService {
     try {
       const result = await firstValueFrom(
         this.apollo.watchQuery({
-          query: GET_ALL_VEHICLES_DROPDOWN,
+          query: FIND_ALL_VEHICLES_NO_PAGINATION,
           fetchPolicy: 'network-only',
         }).valueChanges
       );

@@ -1,9 +1,41 @@
 .full-width {
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 mat-dialog-content {
-  min-width: 400px;
-  padding: 20px;
+  min-width: 350px;
+  padding: 16px;
+}
+
+h2[mat-dialog-title] {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 10px;
+  color: #3f51b5; 
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+  gap: 8px;
+}
+
+button[mat-button] {
+  text-transform: none;
+}
+
+button[mat-raised-button] {
+  text-transform: none;
+  background-color: #3f51b5;
+  color: #fff;
+}
+
+button[mat-raised-button]:hover {
+  background-color: #303f9f;
 }

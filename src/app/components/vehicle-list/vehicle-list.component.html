@@ -1,26 +1,28 @@
-
-
-
 <div class="vehicle-list-container">
   <div class="search-bar">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Search Vehicle Model</mat-label>
-      <input matInput [(ngModel)]="searchText" placeholder="e.g. Toyota" />
+      <input 
+        matInput 
+        [(ngModel)]="searchText" 
+        (input)="onSearchChange()"
+        placeholder="e.g. Toyota" 
+      />
     </mat-form-field>
-<div class="toolbar">
-  <button mat-raised-button color="primary" (click)="search()">Search</button>
-    <button mat-stroked-button color="accent" (click)="loadVehicles()">Reset</button>
-</div>
-    
+    <div class="toolbar">
+      <button mat-raised-button color="primary" (click)="search()">Search</button>
+      <button mat-stroked-button color="accent" (click)="loadVehicles()">Reset</button>
+    </div>
   </div>
+  
   <div class="toolbar">
-  <button mat-raised-button color="primary" (click)="openImportDialog()">
-    +Import file 
-  </button>
+    <button mat-raised-button color="primary" (click)="openImportDialog()">
+      +Import file 
+    </button>
     <button mat-raised-button color="primary" (click)="openExportDialog()">
-    Export file 
-  </button>
-</div>
+      Export file 
+    </button>
+  </div>
 
   <table mat-table [dataSource]="vehicles" class="mat-elevation-z8 full-width-table">
     <!-- Vehicle ID -->
@@ -41,6 +43,18 @@
       <td mat-cell *matCellDef="let v">{{ v.last_name }}</td>
     </ng-container>
 
+    <!-- Email-->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let v">{{ v.email }}</td>
+    </ng-container>
+
+    <!-- Car Make -->
+    <ng-container matColumnDef="car_make">
+      <th mat-header-cell *matHeaderCellDef>Car Make</th>
+      <td mat-cell *matCellDef="let v">{{ v.car_make }}</td>
+    </ng-container>
+    
     <!-- Car Model -->
     <ng-container matColumnDef="car_model">
       <th mat-header-cell *matHeaderCellDef>Model</th>
@@ -59,15 +73,14 @@
       <td mat-cell *matCellDef="let v">{{ v.age_of_vehicle }}</td>
     </ng-container>
 
- <!-- Actions -->
-<ng-container matColumnDef="actions">
-  <th mat-header-cell *matHeaderCellDef> Actions </th>
-  <td mat-cell *matCellDef="let v">
-    <button mat-button color="accent" (click)="updateVehicle(v)">Edit</button>
-    <button mat-button color="warn" (click)="deleteVehicle(v.id)">Delete</button>
-  </td>
-</ng-container>
-
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let v">
+        <button mat-button color="accent" (click)="updateVehicle(v)">Edit</button>
+        <button mat-button color="warn" (click)="deleteVehicle(v.id)">Delete</button>
+      </td>
+    </ng-container>
 
     <!-- Header + Row -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

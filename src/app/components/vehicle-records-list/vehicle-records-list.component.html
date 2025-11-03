@@ -1,4 +1,3 @@
-
 <div class="records-container">
   <h2>Service Records Management</h2>
 
@@ -20,7 +19,7 @@
           <mat-select [(ngModel)]="selectedVIN" (selectionChange)="onVehicleSelect()">
             <mat-option value="">All Vehicles</mat-option>
             <mat-option *ngFor="let v of vehicles" [value]="v.vin">
-              {{ v.vin }}
+              {{ v.vin }} - {{ v.car_model }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -52,10 +51,14 @@
 
   <!-- Column Selection Card -->
   <mat-card class="column-card">
-    <mat-card-header>
+    <mat-card-header class="column-header">
       <mat-card-title>Select Columns to Display</mat-card-title>
+      <button mat-stroked-button (click)="toggleColumnFilter()" class="toggle-button">
+        <mat-icon>{{showColumnFilter ? 'expand_less' : 'expand_more'}}</mat-icon>
+        {{showColumnFilter ? 'Hide' : 'Show'}}
+      </button>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="showColumnFilter">
       <div class="column-checkboxes">
         <mat-checkbox
           *ngFor="let col of availableColumns"
@@ -116,7 +119,7 @@
   </table>
 
   <div *ngIf="records.length === 0" class="no-data">
-    <p *ngIf="!selectedVIN">No service records found. Create one to get started!</p>
+    <p *ngIf="!selectedVIN">Please select a VIN to view service records.</p>
     <p *ngIf="selectedVIN">No service records found for this vehicle.</p>
   </div>
 </div>

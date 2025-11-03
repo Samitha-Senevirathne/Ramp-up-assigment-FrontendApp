@@ -1,3 +1,5 @@
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -7,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RecordsService } from '../../services/vehicle-records.service';
@@ -24,6 +27,7 @@ import { ServiceRecordFormComponent } from '../vehicle-records-form/vehicle-reco
     MatSelectModule,
     MatCardModule,
     MatCheckboxModule,
+    MatIconModule,
     FormsModule,
   ],
   templateUrl: './vehicle-records-list.component.html',
@@ -35,8 +39,8 @@ export class ServiceRecordsListComponent implements OnInit {
   vehicles: any[] = [];
   selectedVIN = '';
   selectedVehicle: any = null;
+  showColumnFilter = false;
   
-  //Available columns
   availableColumns = [
     { value: 'vin', label: 'VIN', checked: true },
     { value: 'description', label: 'Description', checked: true },
@@ -64,9 +68,12 @@ export class ServiceRecordsListComponent implements OnInit {
       .getAllRecords()
       .then((res: any) => {
         console.log('Records Response:', res);
-        this.records = res?.data?.allRecords || [];
-        this.allRecords = [...this.records];
-        console.log('Records loaded:', this.records.length);
+        this.allRecords = res?.data?.allRecords || [];
+        
+        // Reapply the filter after loading
+        this.applyFilter();
+        
+        console.log('All records loaded:', this.allRecords.length);
       })
       .catch((err) => {
         console.error('Error fetching records:', err);
@@ -79,7 +86,7 @@ export class ServiceRecordsListComponent implements OnInit {
       .getAllVehiclesForDropdown()
       .then((res: any) => {
         console.log('Vehicles Response:', res);
-        this.vehicles = res?.data?.findAllVehicles || [];
+        this.vehicles = res?.data?.findAllVehiclesNoPagination || [];
         console.log('Vehicles loaded:', this.vehicles.length);
       })
       .catch((err) => {
@@ -87,31 +94,43 @@ export class ServiceRecordsListComponent implements OnInit {
       });
   }
 
-  //Update displayed columns based on checkbox selection
+  // Helper method to apply filter
+  applyFilter() {
+    if (this.selectedVIN === '' || !this.selectedVIN) {
+      this.records = [];
+    } else {
+      this.records = this.allRecords.filter((r) => r.vin === this.selectedVIN);
+    }
+    console.log('Filter applied, showing:', this.records.length, 'records');
+  }
+
   updateDisplayedColumns() {
     this.displayedColumns = this.availableColumns
       .filter(col => col.checked)
       .map(col => col.value);
     
-    //Always add actions column at the end
     this.displayedColumns.push('actions');
-    
     console.log('Displayed columns:', this.displayedColumns);
   }
 
-  //Filter records by selected VIN
+  toggleColumnFilter() {
+    this.showColumnFilter = !this.showColumnFilter;
+  }
+
   onVehicleSelect() {
     console.log('Selected VIN:', this.selectedVIN);
     
-    if (this.selectedVIN === '') {
-      this.records = [...this.allRecords];
+    if (this.selectedVIN === '' || !this.selectedVIN) {
+      this.records = [];
       this.selectedVehicle = null;
+      console.log('No VIN selected, showing empty table');
     } else {
       this.records = this.allRecords.filter((r) => r.vin === this.selectedVIN);
       this.selectedVehicle = this.vehicles.find((v) => v.vin === this.selectedVIN);
+      
+      console.log('Filtered records:', this.records.length);
+      console.log('Selected vehicle:', this.selectedVehicle);
     }
-    
-    console.log('Filtered records:', this.records.length);
   }
 
   openCreateDialog() {
@@ -157,6 +176,6 @@ export class ServiceRecordsListComponent implements OnInit {
   resetFilter() {
     this.selectedVIN = '';
     this.selectedVehicle = null;
-    this.records = [...this.allRecords];
+    this.records = [];
   }
 }

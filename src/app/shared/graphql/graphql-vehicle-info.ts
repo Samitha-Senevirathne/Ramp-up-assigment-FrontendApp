@@ -55,6 +55,7 @@
         first_name
         last_name
         car_model
+        manufactured_date
         age_of_vehicle
       }
     }
