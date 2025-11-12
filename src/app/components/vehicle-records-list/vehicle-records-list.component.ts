@@ -1,5 +1,3 @@
-
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -35,19 +33,18 @@ import { ServiceRecordFormComponent } from '../vehicle-records-form/vehicle-reco
 })
 export class ServiceRecordsListComponent implements OnInit {
   records: any[] = [];
-  allRecords: any[] = [];
   vehicles: any[] = [];
   selectedVIN = '';
   selectedVehicle: any = null;
   showColumnFilter = false;
-  
+
   availableColumns = [
     { value: 'vin', label: 'VIN', checked: true },
     { value: 'description', label: 'Description', checked: true },
     { value: 'service_date', label: 'Service Date', checked: true },
     { value: 'cost', label: 'Cost', checked: true },
   ];
-  
+
   displayedColumns: string[] = [];
 
   constructor(
@@ -58,30 +55,56 @@ export class ServiceRecordsListComponent implements OnInit {
   ngOnInit() {
     console.log('ServiceRecordsListComponent initialized');
     this.updateDisplayedColumns();
-    this.loadRecords();
     this.loadVehicles();
   }
 
   loadRecords() {
-    console.log('Loading records...');
+    console.log('Loading records for VIN:', this.selectedVIN);
+
+    // if no VIN is selected  don't load anything
+    if (!this.selectedVIN) {
+      this.records = [];
+      return;
+    }
+
+    // to call the service to get vehicle with its service records
     this.recordsService
-      .getAllRecords()
+      .getVehicleWithRecords(this.selectedVIN)
       .then((res: any) => {
         console.log('Records Response:', res);
-        this.allRecords = res?.data?.allRecords || [];
-        
-        // Reapply the filter after loading
-        this.applyFilter();
-        
-        console.log('All records loaded:', this.allRecords.length);
+
+        // Check if we get vehicle data back
+        if (res?.data?.findVehicleByVIN) {
+          const vehicleData = res.data.findVehicleByVIN;
+
+          // Update the selected vehicle info for display
+          this.selectedVehicle = {
+            ...this.selectedVehicle,
+            ...vehicleData,
+          };
+
+          // Get the service records array
+          const serviceRecords = vehicleData.serviceRecords || [];
+
+          // Add VIN to each record (since it's not in the GraphQL response)
+          this.records = serviceRecords.map((record: any) => ({
+            ...record,
+            vin: this.selectedVIN,
+          }));
+
+          console.log('Records loaded:', this.records.length);
+        } else {
+          this.records = [];
+        }
       })
       .catch((err) => {
         console.error('Error fetching records:', err);
+        this.records = [];
       });
   }
 
   loadVehicles() {
-    console.log('Loading vehicles for dropdown...');
+    console.log('Loading vehicles for dropdown.');
     this.recordsService
       .getAllVehiclesForDropdown()
       .then((res: any) => {
@@ -94,21 +117,11 @@ export class ServiceRecordsListComponent implements OnInit {
       });
   }
 
-  // Helper method to apply filter
-  applyFilter() {
-    if (this.selectedVIN === '' || !this.selectedVIN) {
-      this.records = [];
-    } else {
-      this.records = this.allRecords.filter((r) => r.vin === this.selectedVIN);
-    }
-    console.log('Filter applied, showing:', this.records.length, 'records');
-  }
-
   updateDisplayedColumns() {
     this.displayedColumns = this.availableColumns
-      .filter(col => col.checked)
-      .map(col => col.value);
-    
+      .filter((col) => col.checked)
+      .map((col) => col.value);
+
     this.displayedColumns.push('actions');
     console.log('Displayed columns:', this.displayedColumns);
   }
@@ -119,17 +132,20 @@ export class ServiceRecordsListComponent implements OnInit {
 
   onVehicleSelect() {
     console.log('Selected VIN:', this.selectedVIN);
-    
+
     if (this.selectedVIN === '' || !this.selectedVIN) {
       this.records = [];
       this.selectedVehicle = null;
       console.log('No VIN selected, showing empty table');
     } else {
-      this.records = this.allRecords.filter((r) => r.vin === this.selectedVIN);
-      this.selectedVehicle = this.vehicles.find((v) => v.vin === this.selectedVIN);
-      
-      console.log('Filtered records:', this.records.length);
+      // Find the selected vehicle from dropdown list
+      this.selectedVehicle = this.vehicles.find(
+        (v) => v.vin === this.selectedVIN
+      );
       console.log('Selected vehicle:', this.selectedVehicle);
+
+      // Load service records for this vehicle
+      this.loadRecords();
     }
   }
 
@@ -140,7 +156,10 @@ export class ServiceRecordsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loadRecords();
+        // After creating a record, reload the list if a VIN is selected
+        if (this.selectedVIN) {
+          this.loadRecords();
+        }
       }
     });
   }
@@ -153,7 +172,10 @@ export class ServiceRecordsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loadRecords();
+        // After editing a record reload the list if a VIN is selected
+        if (this.selectedVIN) {
+          this.loadRecords();
+        }
       }
     });
   }
@@ -165,7 +187,10 @@ export class ServiceRecordsListComponent implements OnInit {
       .deleteRecord(id)
       .then(() => {
         alert('Record deleted successfully!');
-        this.loadRecords();
+        // Aafter deleting  reload the list if a VIN is selected
+        if (this.selectedVIN) {
+          this.loadRecords();
+        }
       })
       .catch((err) => {
         console.error('Error deleting record:', err);

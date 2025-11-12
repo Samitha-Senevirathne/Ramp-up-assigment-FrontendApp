@@ -9,7 +9,7 @@ export class NotificationService {
 
   connect(userId: string) {
     if (!this.connected) {
-      this.socket = io('http://localhost:3000', { query: { userId } });
+      this.socket = io('http://localhost:3000', { query: { userId } });  //connect
       this.connected = true;
       console.log(`Connected as ${userId}`);
     }
@@ -18,7 +18,7 @@ export class NotificationService {
   onNotification(): Observable<any> {
     return new Observable((observer) => {
       if (!this.socket) return; //no connection yet
-      this.socket.on('notification', (msg) => observer.next(msg));
+      this.socket.on('notification', (msg) => observer.next(msg)); //listen for notifications
     });
   }
 }

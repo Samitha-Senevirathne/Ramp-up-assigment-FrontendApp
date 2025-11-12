@@ -19,7 +19,7 @@ export class VehicleImportComponent {
   ) {}
 
   onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;  //give access to the file 
     if (input.files?.length) {
       this.selectedFile = input.files[0];
     }
@@ -31,7 +31,7 @@ export class VehicleImportComponent {
     const formData = new FormData();
     formData.append('file', this.selectedFile);
 
-    this.http.post('http://localhost:3000/import/upload', formData).subscribe({
+    this.http.post('http://localhost:3000/import/upload', formData).subscribe({  //send reques to the backend enpoint 
       next: () => {
         alert('File uploaded successfully!');
         this.dialogRef.close(true);

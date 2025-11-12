@@ -28,7 +28,7 @@ export class VehicleService {
       this.apollo.query<any>({
         query: SEARCH_BY_MODEL,
         variables: { car_model },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'network-only', //always fetch from server
       })
     );
   }

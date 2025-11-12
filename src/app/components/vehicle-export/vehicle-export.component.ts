@@ -25,7 +25,7 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class VehicleExportComponent {
   minAge?: number;
-  notifications: string[] = [];
+  notifications: string[] = []; //to store the notification msgs come from the server
 
   constructor(
     private http: HttpClient,
@@ -36,20 +36,21 @@ export class VehicleExportComponent {
     this.notificationService.onNotification().subscribe((data) => {
       console.log('Notification received:', data);
       this.notifications.unshift(`${data.timestamp}: ${data.message}`);
-      if (this.notifications.length > 5) this.notifications.pop(); //keep last 5
+      if (this.notifications.length > 10) this.notifications.pop(); //keep last 10
     });
   }
 
   exportVehicles() {
+
     this.dialogRef.close(); 
   const userId = localStorage.getItem('userId') || 'guest';
   
-  this.http.post('http://localhost:3000/export/vehicles', {
+  this.http.post('http://localhost:3000/export/vehicles', {    //send to the backend server
     minAge: this.minAge,
     userId: localStorage.getItem('userId'),
   }).subscribe({
     next: () => {
-      alert(`Export job queued: ${userId}. You’ll get a notification when done.`);
+      alert(`Export job queued: ${userId}. You get a notification when done.`);
     
     },
     error: (err) => {

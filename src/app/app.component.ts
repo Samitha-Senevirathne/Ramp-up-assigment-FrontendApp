@@ -19,27 +19,13 @@ import { NotificationService } from './services/notification.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-// export class AppComponent implements OnInit {
 
-// userId = '';
-
-//   ngOnInit() {
-//     const saved = localStorage.getItem('userId');
-//     if (saved) {
-//       this.userId = saved;
-//     } else {
-//       this.userId = prompt('Enter your username or ID:') || 'guest';
-//       localStorage.setItem('userId', this.userId);
-//     }
-//   }
-
-// }
 
 export class AppComponent implements OnInit {
   userId = '';
 
   constructor(private notificationService: NotificationService) {}
-
+//get for useID
   ngOnInit() {
     const saved = localStorage.getItem('userId');
     if (saved) {
@@ -49,7 +35,7 @@ export class AppComponent implements OnInit {
       localStorage.setItem('userId', this.userId);
     }
 
-    //connect only now
+    //connect to websocket only now
     this.notificationService.connect(this.userId);
 
     //listen for notifications

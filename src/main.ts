@@ -12,9 +12,9 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
-    provideRouter(routes),
+    provideRouter(routes),  //config routting
 
-    //Apollo setup 
+    //Apollo client configure
     provideApollo(() => {
       return {
         cache: new InMemoryCache(),

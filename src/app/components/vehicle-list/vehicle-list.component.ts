@@ -43,7 +43,7 @@ export class VehicleListComponent implements OnInit, OnDestroy {
     'actions',
   ];
   searchText = '';
-  page = 1;
+  page = 1;    ///pagination state
   private searchSubject = new Subject<string>();
 
   constructor(
@@ -56,8 +56,8 @@ export class VehicleListComponent implements OnInit, OnDestroy {
     
     // Setup debounced search
     this.searchSubject.pipe(
-      debounceTime(500),
-      distinctUntilChanged()
+      debounceTime(500),     //wait 500ms after typing
+      distinctUntilChanged()   //only if value changed
     ).subscribe(searchTerm => {
       this.performSearch(searchTerm);
     });
